@@ -75,6 +75,16 @@ app.put('/user',async(req,res)=>{
     const result = await userCollection.updateOne(query,updateDoc,options)
     res.send(result)
   })
+  app.get('/user/:email',async(req,res)=>{
+    const email = req.params.email
+    const result = await userCollection.findOne({email})
+    res.send(result)
+  })
+  // ...........................
+app.get('/users',async(req,res)=>{
+  const result = await userCollection.find().toArray()
+  res.send(result)
+})
 
   app.patch('/users/update/:email',async(req,res)=>{
     const email = req.params.email
@@ -87,6 +97,8 @@ app.put('/user',async(req,res)=>{
     const result = await userCollection.updateOne(query,updateDoc)
     res.send(result)
   })
+
+
 
     // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
