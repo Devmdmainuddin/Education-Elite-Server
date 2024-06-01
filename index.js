@@ -31,6 +31,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
+    const ScholarShipCollection = client.db("education-elite").collection("ScholarShip")
     const userCollection = client.db("education-elite").collection("users")
 
   // auth related api
@@ -45,6 +46,17 @@ async function run() {
  
     res.clearCookie('token', { maxAge: 0 }).send({ success: true })
 })
+// ......................................................
+app.post('/addScholarShip', async (req, res) => {
+  const art = req.body;
+  // console.log('properties', art)
+  const result = await ScholarShipCollection.insertOne(art)
+  res.send(result);
+})
+
+
+
+
 
     // ...............................users...................................
 
@@ -97,8 +109,12 @@ app.get('/users',async(req,res)=>{
     const result = await userCollection.updateOne(query,updateDoc)
     res.send(result)
   })
-
-
+  app.delete('/users/:id',async (req, res) => {
+    const id = req.params.id;
+    const query = { _id: new ObjectId(id) }
+    const result = await userCollection.deleteOne(query);
+    res.send(result);
+  })
 
     // await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
