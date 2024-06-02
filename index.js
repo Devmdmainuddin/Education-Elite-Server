@@ -47,6 +47,33 @@ async function run() {
     res.clearCookie('token', { maxAge: 0 }).send({ success: true })
 })
 // ......................................................
+//......................all scholarship........................
+app.get('/allScholarShip',async(req,res)=>{
+  const result = await ScholarShipCollection.find().toArray()
+  res.send(result)
+})
+
+app.get('/ScholarShip', async (req, res) => {
+   const sort = req.query.sort
+  // const search = req.query.search
+  // let query = {
+  //     productName: { $regex: String(search), $options: 'i' },
+  // }
+
+  let options = {}
+   if (sort) options = { sort: { ApplicationFees: sort === 'asc' ? 1 : -1 } }
+  const result = await ScholarShipCollection.find(options).toArray();
+  res.send(result)
+})
+//................details......................
+
+app.get('/ScholarShip/:id', async (req, res) => {
+  const id = req.params.id;
+  const query = { _id: new ObjectId(id) }
+  const result = await ScholarShipCollection.findOne(query)
+  res.send(result);
+})
+//..................................................
 app.post('/addScholarShip', async (req, res) => {
   const art = req.body;
   // console.log('properties', art)
