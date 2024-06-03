@@ -116,10 +116,6 @@ async function run() {
 
       res.send(result)
     })
-
-
-
-
     app.get('/ScholarshipCount', async (req, res) => {
       const filter = req.query.filter
       let search = req.query.search
@@ -140,6 +136,30 @@ async function run() {
       const result = await ScholarShipCollection.insertOne(art)
       res.send(result);
     })
+
+    // update a job in db
+    app.put('/ScholarShips/:id', async (req, res) => {
+      const id = req.params.id
+      const scholarShipsData = req.body
+      const query = { _id: new ObjectId(id) }
+      const options = { upsert: true }
+      const updateDoc = {
+        $set: {
+          ...scholarShipsData,
+        },
+      }
+      const result = await ScholarShipCollection.updateOne(query, updateDoc, options)
+      res.send(result)
+    })
+
+    app.delete('/ScholarShips/:id', async (req, res) => {
+      const id = req.params.id
+      const query = { _id: new ObjectId(id) }
+      const result = await ScholarShipCollection.deleteOne(query)
+      res.send(result)
+    })
+
+
     //....................apply scholarship..............................
 
 
