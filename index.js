@@ -76,6 +76,13 @@ async function run() {
     //.................................................................
 
     //.................................................................
+
+    app.get('/ScholarShips', async (req, res) => {
+      const result = await ScholarShipCollection.find().toArray()
+      res.send(result)
+    })
+
+
     app.get('/ScholarShips/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) }
@@ -157,15 +164,18 @@ async function run() {
     })
 
     //..................... review show..........................
-    // app.get('/reviews'),async(req,res)=>{
-    //   const result = await reviewsCollection.find().toArray()
-    //   res.send(result)
-    // }
+
+
     app.get('/reviews', async (req, res) => {
       const result = await reviewsCollection.find().toArray()
       res.send(result)
     })
-
+    app.delete('/reviews/:id', async (req, res) => {
+      const id = req.params.id
+      const query = { _id: new ObjectId(id) }
+      const result = await reviewsCollection.deleteOne(query)
+      res.send(result)
+    })
 
     // ...............................users...................................
 
