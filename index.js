@@ -95,18 +95,18 @@ async function run() {
       const filter = req.query.filter
       const sort = req.query.sort
       let search = req.query.search
-    
+
       search = `${search}`;
-       
-  
-        let query = {
-         ScholarshipName: { $regex: search, $options: 'i' },
-        }
-        if (filter) query.SubjectCategorey = filter
-        let options = {}
-        if (sort) options = { sort: { postDate: sort === 'asc' ? 1 : -1 } }
-        const result = await ScholarShipCollection.find(query, options).skip(page * size).limit(size).toArray()
-  
+
+
+      let query = {
+        ScholarshipName: { $regex: search, $options: 'i' },
+      }
+      if (filter) query.SubjectCategorey = filter
+      let options = {}
+      if (sort) options = { sort: { postDate: sort === 'asc' ? 1 : -1 } }
+      const result = await ScholarShipCollection.find(query, options).skip(page * size).limit(size).toArray()
+
       res.send(result)
     })
 
@@ -134,6 +134,13 @@ async function run() {
       res.send(result);
     })
     //....................apply scholarship..............................
+
+
+    app.get('/applyScholarShip', async (req, res) => {
+      const result = await appliedScholarshipCollection.find().toArray()
+      res.send(result)
+    })
+
     app.post('/applyScholarShip', async (req, res) => {
       const art = req.body;
       // console.log('properties', art)
