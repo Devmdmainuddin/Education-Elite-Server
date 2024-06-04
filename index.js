@@ -37,6 +37,8 @@ async function run() {
     const reviewsCollection = client.db("education-elite").collection("reviews")
     const paymentCollection = client.db("education-elite").collection("payment")
     const appliedScholarshipCollection = client.db("education-elite").collection("apply")
+    const contactUSCollection = client.db("education-elite").collection("contactUS")
+   
     // auth related api
     app.post('/jwt', async (req, res) => {
       const user = req.body;
@@ -137,7 +139,7 @@ async function run() {
       res.send(result);
     })
 
-    // update a job in db
+    // update  ScholarShips in db
     app.put('/ScholarShips/:id', async (req, res) => {
       const id = req.params.id
       const scholarShipsData = req.body
@@ -168,12 +170,43 @@ async function run() {
       res.send(result)
     })
 
+//..........................................................................
+
+
+app.get('/applyScholarShip/:email', async (req, res) => {
+  const email = req.params.email
+  const query = { 'userEmail': email }
+  const result = await appliedScholarshipCollection.find(query).toArray()
+  res.send(result)
+})
+
+app.delete('/applyScholarShip/:id', async (req, res) => {
+  const id = req.params.id
+  const query = { _id: new ObjectId(id) }
+  const result = await appliedScholarshipCollection.deleteOne(query)
+  res.send(result)
+})
+
+app.patch('/application/update/:id', async (req, res) => {
+  const id = req.params.id
+  const application = req.body
+  const query = { _id: new ObjectId(id) }
+  const updateDoc = {
+    $set: { ...application, Timestamp: Date.now() },
+
+  }
+  const result = await appliedScholarshipCollection.updateOne(query, updateDoc)
+  res.send(result)
+})
+
     app.post('/applyScholarShip', async (req, res) => {
       const art = req.body;
       // console.log('properties', art)
       const result = await appliedScholarshipCollection.insertOne(art)
       res.send(result);
     })
+
+
 
     //...................review...........................
     //....................review add ........................
@@ -190,11 +223,30 @@ async function run() {
       const result = await reviewsCollection.find().toArray()
       res.send(result)
     })
+//..........................................................................
+
+
+app.get('/reviews/:email', async (req, res) => {
+  const email = req.params.email
+  const query = { 'reviewerEmail': email }
+  const result = await reviewsCollection.find(query).toArray()
+  res.send(result)
+})
+
+//..........................................................................
+
     app.delete('/reviews/:id', async (req, res) => {
       const id = req.params.id
       const query = { _id: new ObjectId(id) }
       const result = await reviewsCollection.deleteOne(query)
       res.send(result)
+    })
+
+    //..................................................
+    app.post('/contactUs', async (req, res) => {
+      const art = req.body;
+      const result = await contactUSCollection.insertOne(art)
+      res.send(result);
     })
 
     // ...............................users...................................
