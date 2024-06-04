@@ -170,6 +170,15 @@ async function run() {
       res.send(result)
     })
 
+
+    app.get('/applyScholarShip/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) }
+      const result = await appliedScholarshipCollection.findOne(query)
+      res.send(result);
+    })
+
+
 //..........................................................................
 
 
@@ -198,6 +207,20 @@ app.patch('/application/update/:id', async (req, res) => {
   const result = await appliedScholarshipCollection.updateOne(query, updateDoc)
   res.send(result)
 })
+
+app.patch('/application/updateFeedback/:id', async (req, res) => {
+  const id = req.params.id
+  const application = req.body
+  const query = { _id: new ObjectId(id) }
+  const updateDoc = {
+    $set: { ...application, Timestamp: Date.now() },
+
+  }
+  const result = await appliedScholarshipCollection.updateOne(query, updateDoc)
+  res.send(result)
+})
+
+
 
     app.post('/applyScholarShip', async (req, res) => {
       const art = req.body;
