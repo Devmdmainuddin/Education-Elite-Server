@@ -62,7 +62,6 @@ async function run() {
   // middlewares 
 
     const verifyToken = (req, res, next) => {
-      console.log('inside verify token', req.headers.authorization);
       if (!req.headers.authorization) {
         return res.status(401).send({ message: 'unauthorized access,1' });
       }
@@ -177,12 +176,12 @@ async function run() {
     //..................................................
     app.post('/addScholarShip', async (req, res) => {
       const art = req.body;
-      // console.log('properties', art)
+     
       const result = await ScholarShipCollection.insertOne(art)
       res.send(result);
     })
 
-    // update  ScholarShips in db
+   
     app.put('/ScholarShips/:id', async (req, res) => {
       const id = req.params.id
       const scholarShipsData = req.body
@@ -210,7 +209,6 @@ async function run() {
 
     app.get('/applyScholarShip', async (req, res) => {
       const sort = req.query.sort
-      console.log(sort);
       let options = {}
       if (sort) options = { sort: { applyDate: sort === 'asc' ? 1 : -1 } }
 
@@ -287,7 +285,6 @@ async function run() {
 
     app.post('/applyScholarShip', async (req, res) => {
       const art = req.body;
-      // console.log('properties', art)
       const result = await appliedScholarshipCollection.insertOne(art)
       res.send(result);
     })
@@ -317,12 +314,7 @@ async function run() {
       res.send(result)
     })
     //..........................................................................
-    // app.get('/applyScholarShip/:email', async (req, res) => {
-    //   const email = req.params.email
-    //   const query = { 'userEmail': email }
-    //   const result = await appliedScholarshipCollection.find(query).toArray()
-    //   res.send(result)
-    // })
+ 
 
     app.get('/review/:email',verifyToken, async (req, res) => {
       const email = req.params.email
@@ -403,7 +395,6 @@ async function run() {
     app.get('/filteruser',verifyToken, verifyAdmin, async (req, res) => {
       const filter = req.query.filter
       const sort = req.query.sort
-      // console.log('pagination query',req.query)
       let query ={}
       if (filter) query.role = filter
       let options = {}
@@ -421,7 +412,6 @@ async function run() {
     app.patch('/users/:email',verifyToken, async (req, res) => {
       const email = req.params.email
       const user = req.body
-      console.log(req.body);
       const query = { email }
       const updateDoc = {
         $set: { ...user, Timestamp: Date.now() },
@@ -468,13 +458,7 @@ async function run() {
     app.post('/payments',verifyToken, async (req, res) => {
       const payment = req.body
       const result = await paymentCollection.insertOne(payment)
-      // console.log('payments info',payment);
-      // const query = {_id:{
-      //   $in:payment.cartIds.map(id => new ObjectId(id))
 
-      // }};
-
-      // const deleteResult = await paymentCollection.deleteMany(query)
       res.send({ result })
     })
 
