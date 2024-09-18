@@ -14,8 +14,8 @@ app.use(cors({
   origin: ['http://localhost:5173',
     'http://localhost:5174',
     'https://education-elite-e.web.app',
-    'education-elite-e.firebaseapp.com',
-    'https://education-elite-server.vercel.app'
+    'https://education-elite-e.firebaseapp.com/',
+    
   ],
   credentials: true
 }));
