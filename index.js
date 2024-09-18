@@ -14,7 +14,8 @@ app.use(cors({
   origin: ['http://localhost:5173',
     'http://localhost:5174',
     'https://education-elite-e.web.app',
-    'education-elite-e.firebaseapp.com'
+    'education-elite-e.firebaseapp.com',
+    'https://education-elite-server.vercel.app'
   ],
   credentials: true
 }));
@@ -61,7 +62,7 @@ async function run() {
 
   // middlewares 
 
-    const verifyToken = (req, res, next) => {
+    const verifyToken =async (req, res, next) => {
       if (!req.headers.authorization) {
         return res.status(401).send({ message: 'unauthorized access,1' });
       }
@@ -173,6 +174,7 @@ async function run() {
       res.send({ count })
     })
 
+    
     //..................................................
     app.post('/addScholarShip', async (req, res) => {
       const art = req.body;
